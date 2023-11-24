@@ -1,16 +1,10 @@
 const { isLoggedIn } = require("./utils/helpers");
+const { deleteOnlineUsers } = require("./utils/state");
 
 let activeUsers = 0
-let onlineUsers = {}
 
-function deleteKeyByValue(obj, valueToDelete) {
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key) && obj[key] === valueToDelete) {
-            delete obj[key];
-            break; // If you want to delete only the first matching key
-        }
-    }
-}
+
+
 
 const ioFunc = (io) => {
     io.on('connection', (socket) => {
@@ -34,7 +28,7 @@ const ioFunc = (io) => {
             console.log('User disconnected');
             activeUsers--;
             io.emit("onlineUsers", activeUsers)
-            deleteKeyByValue(socket.id)
+            deleteOnlineUsers(socket.id)
         });
 
         socket.on('loggedIn', (userId) => {
