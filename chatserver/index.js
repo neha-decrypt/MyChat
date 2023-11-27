@@ -1,13 +1,12 @@
 const express = require('express')
 const cors = require('cors')
 const http = require('http')
-const socketIO = require('socket.io')
 const userRoutes = require('./routes/user.routes')
 const chatRoutes = require('./routes/chat.routes')
-const { ioFunc } = require('./socketEvents');
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser');
+const { setupSocket } = require('./setupSocket')
 
 require('dotenv').config()
 
@@ -32,12 +31,15 @@ app.use("/user", userRoutes)
 app.use("/chat", chatRoutes)
 
 const server = http.createServer(app)
-const io = socketIO(server);
+// const io = setupSocket(server);
+const io = setupSocket(server, {
+    cors: "*"
+});
 
-ioFunc(io);
+// ioFunc(io);
 
 server.listen(8080, () => {
     console.log("Listening..")
 })
 
-module.exports = io;
+module.exports = { io, app, server };

@@ -15,6 +15,7 @@ const verifyToken = (req, res, next) => {
 
 
         req.email = decoded.email
+        req.id = decoded.id
         // console.log("decoded", decoded)
         // Move to the next middleware or route handler
         next();

@@ -1,14 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { ChatControllers } = require("./../controllers/chat.controller");
+const verifyToken = require('../middlewares/auth.middleware');
 
-router.get('/sendMessage', () => {
-    try {
-        return res.status(200).json({ message: "Success" })
-    }
-    catch (Err) {
-        console.log("Err", Err)
-        return res.status(500).json({ message: "Error" })
-    }
-})
+router.post('/sendMessage', verifyToken, ChatControllers.sendMessage)
 
 module.exports = router 

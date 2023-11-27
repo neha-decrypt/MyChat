@@ -11,10 +11,10 @@ function deleteKeyByValue(obj, valueToDelete) {
 
 module.exports = {
     getOnlineUsers: () => onlineUsers,
-    setOnlineUsers: (value) => {
-        onlineUsers[userId] = socket.id
+    setOnlineUsers: (userId, socketId) => {
+        onlineUsers[userId] = socketId
     },
     deleteOnlineUsers: (value) => {
-        deleteKeyByValue(value)
+        deleteKeyByValue(onlineUsers, value)
     },
 };
