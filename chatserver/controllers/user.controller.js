@@ -22,18 +22,15 @@ UserControllers.login = async (req, res) => {
             }
             // Create a new user
             const newUser = new User({ email, password });
-            await newUser.save();
+            user = await newUser.save();
         } catch (error) {
             console.error(error);
             return res.status(500).json({ statusCode: 500, message: 'Internal Server Error' });
         }
     }
-    const { io } = require("./../index.js");
-    io.emit("loggedIn", user._id)
-    // Create and send a JWT token
     const token = jwt.sign({ email: email, id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.cookie('authToken', token, { httpOnly: true });
-    return res.status(200).json({ statusCode: 200, data: { token: token }, message: "User Logged in Successfully" });
+    return res.status(200).json({ statusCode: 200, data: { token: token, userId: user._id, email: email }, message: "User Logged in Successfully" });
 }
 
 UserControllers.logout = async (req, res) => {

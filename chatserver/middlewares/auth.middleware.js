@@ -1,9 +1,10 @@
+const { request } = require('express');
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
-    console.log("cookies", req.cookies)
-    const token = req.cookies.authToken;
-    // console.log("Token", token)
+    // console.log("cookies", req)
+    const token = req.headers['authorization'];
+    console.log("Token", token)
     if (!token) {
         return res.status(401).json({ message: 'Access denied. No token provided.' });
     }

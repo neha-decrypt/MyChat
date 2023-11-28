@@ -22,8 +22,8 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(
     cors({
-        credentials: true,
-        origin: "*",
+        // credentials: true,
+        origin: ["http://localhost:3000/"],
     })
 );
 app.use(cookieParser());
@@ -33,7 +33,7 @@ app.use("/chat", chatRoutes)
 const server = http.createServer(app)
 // const io = setupSocket(server);
 const io = setupSocket(server, {
-    cors: "*"
+    cors: ["http://localhost:3000/"]
 });
 
 // ioFunc(io);
