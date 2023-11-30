@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { GetMyMessages } from "../../apiServices";
 import "./message.css";
+import eventEmitter from "../../events/events";
 
 export const Messsages = () => {
   const [messages, setMessage] = useState<any>([]);
 
+  const fetch = async () => {
+    let data = await GetMyMessages();
+    setMessage(data);
+  };
+
   useEffect(() => {
-    const fetch = async () => {
-      let data = await GetMyMessages();
-      setMessage(data);
-    };
     fetch();
   }, []);
+
+  eventEmitter.removeAllListeners("ReloadMessage");
+  eventEmitter.on("ReloadMessage", async () => {
+    await fetch();
+  });
 
   return (
     <>

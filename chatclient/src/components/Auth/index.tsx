@@ -13,7 +13,7 @@ const LoginForm = () => {
     let res = await Login({ email, password });
     if (res) {
       login();
-      navigate("/home");
+      navigate("/");
     }
   };
 

@@ -7,6 +7,7 @@ import { Messsages } from "./components/Chat/Messages";
 import { MesssageDetails } from "./components/Chat/MessageDetails";
 import io from "socket.io-client";
 import SendMessage from "./components/Chat/SendMessage";
+import eventEmitter from "./events/events";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     element: <LoginForm />,
   },
   {
-    path: "/home",
+    path: "/",
     element: <Home />,
   },
   {
@@ -57,15 +58,23 @@ function App() {
       socket.on("privateMessage", () => {
         console.log("Message from the server");
         alert("New Message");
+        eventEmitter.emit("ReloadMessage");
       });
+
+      socket.on("MessageDelivered", () => {
+        console.log("Message from the server");
+        alert("Message Delivered");
+        eventEmitter.emit("ReloadMessage");
+      });
+
       // Function to emit the "messageDelivered" event
       const sendMessageDeliveredEvent = () => {
-        socket.emit("messagesDelivered");
+        socket.emit("messagesDelivered", localStorage.getItem("userId"));
         console.log("Emitted: messagesDelivered");
       };
 
       // Call the function to emit the event (you can trigger this function as needed)
-      sendMessageDeliveredEvent();
+      if (localStorage.getItem("userId")) sendMessageDeliveredEvent();
 
       // Clean up the socket connection when the component unmounts
       return () => {
